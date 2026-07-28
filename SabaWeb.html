@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Saba Detection</title>
+
+ <!-- Firebase Libraries -->
+ <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+ <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+ <script src="firebase-config.js"></script>
+
+ <style>
+ body{font-family:Arial,sans-serif;text-align:center;background:#f5e1a4;color:#4a3f00;margin:0;padding:0;overflow:hidden}
+ .container{position:relative;max-width:600px;margin:50px auto;padding:20px;background:#fff3cd;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,.1);border:2px solid #d4a017;z-index:2}
+ h1{color:#d4a017;font-family:'Comic Sans MS',cursive,sans-serif}
+ .banana-icon{width:80px;height:auto}
+ .info{font-size:1.2em;font-weight:bold;margin-top:10px}
+ .banana{position:absolute;width:50px;animation:floatBanana 5s linear infinite}
+
+ @keyframes floatBanana{
+  0%{transform:translateY(-100px) rotate(0);opacity:0}
+  100%{transform:translateY(100vh) rotate(360deg);opacity:1}
+ }
+
+ .popup{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.8);background:#d4a017;color:white;padding:15px 30px;font-size:1.5em;font-weight:bold;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,.3);opacity:0;visibility:hidden;transition:.3s}
+ .popup.show{opacity:1;visibility:visible;transform:translate(-50%,-50%) scale(1)}
+ .popup.hide{opacity:0;visibility:hidden;transform:translate(-50%,-50%) scale(.8)}
+
+ .reset-button{background:#f3e5ab;color:#4a3f00;font-size:1em;font-weight:bold;padding:10px 20px;border:2px solid #d4a017;border-radius:8px;cursor:pointer;margin-top:15px}
+ .reset-button:hover{background:#e6d5a3}
+ </style>
+</head>
+
+<body>
+
+ <div class="container">
+  <img src="https://cdn-icons-png.flaticon.com/512/6482/6482627.png" class="banana-icon">
+
+  <h1>Saba Counting System</h1>
+
+  <p class="info"><strong>Detected Saba:</strong> <span id="count">0</span></p>
+  <p class="info"><strong>Estimated Price:</strong> ₱<span id="price">0.00</span></p>
+  <p class="info"><strong>Total Count:</strong> <span id="total_count">0</span></p>
+
+  <button class="reset-button" onclick="resetTotalCount()">🔄 Reset Total Count</button>
+ </div>
+
+ <!-- Popup notification -->
+ <div id="popup" class="popup">🍌 DONE! 🍌</div>
+
+ <script>
+ // Initialize Firebase
+ firebase.initializeApp(firebaseConfig);
+ const database=firebase.database();
+
+ console.log("✅ Firebase initialized successfully!");
+
+ let lastTotalCount=0;
+
+
+ // Listen for Firebase data updates
+ database.ref("saba_detection").on("value",(snapshot)=>{
+  if(snapshot.exists()){
+   const data=snapshot.val();
+
+   console.log("🔥 Data received:",data);
+
+   document.getElementById("count").innerText=data.count||0;
+   document.getElementById("price").innerText=(data.price||0).toFixed(2);
+   document.getElementById("total_count").innerText=data.total_count||0;
+
+
+   // Show popup when total count changes
+   if(data.total_count!==lastTotalCount){
+    showPopup();
+    lastTotalCount=data.total_count;
+   }
+  }
+ });
+
+
+ // Display popup message
+ function showPopup(){
+  const popup=document.getElementById("popup");
+
+  popup.classList.add("show");
+  popup.classList.remove("hide");
+
+  setTimeout(()=>{
+   popup.classList.add("hide");
+  },1000);
+ }
+
+
+ // Reset total count in Firebase
+ function resetTotalCount(){
+  database.ref("saba_detection/total_count").set(0).then(()=>{
+
+   console.log("✅ Total count reset");
+
+   document.getElementById("total_count").innerText=0;
+
+  });
+ }
+
+
+ // Create floating banana animation
+ function createBanana(){
+  const banana=document.createElement("img");
+
+  banana.src="https://cdn-icons-png.flaticon.com/512/6482/6482627.png";
+  banana.classList.add("banana");
+
+  banana.style.left=Math.random()*window.innerWidth+"px";
+  banana.style.animationDuration=(Math.random()*3+3)+"s";
+
+  document.body.appendChild(banana);
+
+  setTimeout(()=>{
+   banana.remove();
+  },5000);
+ }
+
+ setInterval(createBanana,500);
+ </script>
+
+</body>
+</html>

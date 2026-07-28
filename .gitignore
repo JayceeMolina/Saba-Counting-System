@@ -1,0 +1,39 @@
+# Firebase Credentials
+# Ignore Firebase Admin SDK keys
+firebase/*.json
+
+# Environment Variables
+.env
+.env.*
+
+# Python Cache
+__pycache__/
+*.pyc
+
+# Virtual Environment
+
+.venv/
+venv/
+
+# YOLO Files
+# Ignore trained model weights
+*.pt
+
+# Ignore YOLO training results
+runs/
+
+# Ignore YOLO dataset folders
+saba_counter_instance_seg-2-20250302T171218Z-001/
+
+# IDE Settings
+.vscode/
+
+# Local Testing Files
+# Ignore old testing script
+Predict and Count.py
+
+# Firebase Web Config
+firebase-config.js
+
+# YOLO Dataset
+saba_counter_instance_seg-2-20250302T171218Z-001/
