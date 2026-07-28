@@ -218,6 +218,7 @@ These contain private credentials, large models, or datasets.
 ## 👨‍💻 Author
 
 **Jaycee Molina**
+
 Computer Engineer
 
 GitHub:
