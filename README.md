@@ -2,7 +2,7 @@
 
 An ML-powered Saba banana counting system using **YOLO Instance Segmentation**, **OpenCV**, and **Firebase Realtime Database** for real-time detection, counting, and monitoring.
 
-The system detects Saba bananas through a camera, counts objects, estimates price, and sends data to Firebase for monitoring.
+The system detects Saba bananas through a camera, counts objects, and sends data to Firebase for monitoring.
 
 ---
 
